@@ -2,7 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { createElement, getAllElements, deleteElement } from './util';
 import { generateCreateMessages, generateDeleteMessages } from '../utils/messages';
 
-const assetMessages = {
+const deviceCategoryMessages = {
   create: generateCreateMessages('device category'),
   delete: generateDeleteMessages('device category'),
 }

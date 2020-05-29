@@ -4,16 +4,16 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    accessToken: {
-      type: DataTypes.STRING(2048),
-      unique: true,
-    }
-  })
+    password: {
+      type: DataTypes.STRING,
+    },
+    count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+  });
 
-  User.associate = (models) => {
-
-  }
+  User.associate = (models) => {};
 
   return User;
 };
-
