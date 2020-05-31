@@ -65,11 +65,14 @@ const typeDefs = gql`
       categoryId: String
     ): Status
 
-    deleteDevice(id: ID): Status
+    deleteDevice(id: ID!): Status
 
     # Asset
-    addAsset(name: String, quantity: Int): Status
-    deleteAsset(id: ID): Status
+    addAsset(name: String, quantity: Int, description: String): Status
+
+    editAsset(id: ID!, name: String, quantity: Int, description: String): Status
+
+    deleteAsset(id: ID!): Status
   }
 
   type UserMessage {
@@ -94,6 +97,7 @@ const typeDefs = gql`
   }
 
   type AllAssets {
+    count: Int
     allElements: [Asset]
     info: Status
   }
@@ -102,6 +106,7 @@ const typeDefs = gql`
     id: ID
     name: String
     quantity: Int
+    description: String
   }
 
   type Device {
@@ -117,6 +122,7 @@ const typeDefs = gql`
     message: String
     success: Boolean
     error: Int
+    asset: Asset
   }
 `;
 

@@ -27,7 +27,6 @@ export const validateTokens = async (req, res, models) => {
   if (!refreshToken && !accessToken) {
     return;
   }
-
   try {
     const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     req.userId = data.userId;
@@ -35,6 +34,8 @@ export const validateTokens = async (req, res, models) => {
   } catch {}
 
   if (!refreshToken) {
+    res.clearCookie('refresh-token');
+    res.clearCookie('access-token');
     return;
   }
 
@@ -43,17 +44,20 @@ export const validateTokens = async (req, res, models) => {
   try {
     data = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
   } catch {
+    res.clearCookie('refresh-token');
+    res.clearCookie('access-token');
     return;
   }
   const user = await models.User.findOne({ where: { id: data.userId } });
   // token has been invalidated
   if (!user || user.count !== data.count) {
+    res.clearCookie('refresh-token');
+    res.clearCookie('access-token');
     return;
   }
   user.count = user.count + 1;
   user.save();
   const tokens = createTokens(user);
-
   res.cookie('refresh-token', tokens.refreshToken);
   res.cookie('access-token', tokens.accessToken);
   req.userId = user.id;

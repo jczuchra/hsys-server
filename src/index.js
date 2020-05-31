@@ -19,7 +19,7 @@ env.config();
 
 const server = new ApolloServer({
   context: async ({ req, res }) => {
-    validateTokens(req, res, models);
+    await validateTokens(req, res, models);
     return { req, res };
   },
   typeDefs,

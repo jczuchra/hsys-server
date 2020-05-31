@@ -42,6 +42,10 @@ export const deleteExists = (type) =>
   `${firstLetterToUpperCase(type)} with this id does not exist.`;
 export const deleteNotAllowed = (type) =>
   `You can't delete this ${firstLetterToLowerCase(type)}.`;
+export const editSuccess = (type) =>
+  `${firstLetterToUpperCase(type)} edited succesfully.`;
+export const editNotAllowed = (type) =>
+  `${firstLetterToUpperCase(type)} can not be edited.`;
 
 export const generateCreateMessages = (type) => ({
   success: createSuccess(type),
@@ -52,6 +56,11 @@ export const generateDeleteMessages = (type) => ({
   success: deleteSuccess(type),
   error: deleteNotAllowed(type),
   exists: deleteExists(type),
+});
+
+export const generateEditMessages = (type) => ({
+  success: editSuccess(type),
+  error: editNotAllowed(type),
 });
 
 export default messages;

@@ -1,11 +1,21 @@
 import { DataSource } from 'apollo-datasource';
-import { createElement, getAllElements, deleteElement } from './util';
-import { generateCreateMessages, generateDeleteMessages } from '../utils/messages';
+import {
+  createElement,
+  getAllElements,
+  deleteElement,
+  editElement,
+} from './util';
+import {
+  generateCreateMessages,
+  generateDeleteMessages,
+  generateEditMessages,
+} from '../utils/messages';
 
 const assetMessages = {
-    create: generateCreateMessages('asset'),
-    delete: generateDeleteMessages('asset'),
-}
+  create: generateCreateMessages('asset'),
+  delete: generateDeleteMessages('asset'),
+  edit: generateEditMessages('asset'),
+};
 
 class AssetAPI extends DataSource {
   constructor({ models }) {
@@ -29,33 +39,41 @@ class AssetAPI extends DataSource {
    * instead
    */
   async addAsset(params = {}) {
-      return await createElement({
-        model: this.store.Asset,
-        where: {
-            name: params.name,
-        },
-        defaults: {
-            ...params,
-        },
-        messages: assetMessages.create,
-      })
+    return await createElement({
+      model: this.store.Asset,
+      where: {
+        name: params.name,
+      },
+      defaults: {
+        ...params,
+      },
+      messages: assetMessages.create,
+    });
   }
 
   async getAllAssets() {
-      return await getAllElements({
-        model: this.store.Asset,
-        messages: assetMessages,
-      })
+    return await getAllElements({
+      model: this.store.Asset,
+      messages: assetMessages,
+    });
   }
 
   async deleteAsset({ id }) {
     return await deleteElement({
-        model: this.store.Asset,
-        where: { id },
-        messages: assetMessages.delete,
-    })
+      model: this.store.Asset,
+      where: { id },
+      messages: assetMessages.delete,
+    });
   }
 
+  async editAsset(params) {
+    return await editElement({
+      model: this.store.Asset,
+      where: { id: params.id },
+      messages: assetMessages.edit,
+      newValues: { ...params },
+    });
+  }
 }
 
 export default AssetAPI;

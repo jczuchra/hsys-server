@@ -43,6 +43,8 @@ export default {
       isLoggedIn(req) && (await dataSources.AssetAPI.addAsset(params)),
     deleteAsset: async (_, { id }, { dataSources, req }) =>
       isLoggedIn(req) && (await dataSources.AssetAPI.deleteAsset({ id })),
+    editAsset: async (_, params, { dataSources, req }) =>
+      isLoggedIn(req) && (await dataSources.AssetAPI.editAsset(params)),
   },
 };
 
