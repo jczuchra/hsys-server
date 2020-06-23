@@ -10,8 +10,11 @@ export default {
       dataSources.UserAPI.findOne({ where: { id: req.userId } }),
     allDeviceCategories: async (_, __, { dataSources, req }) =>
       isLoggedIn(req) && dataSources.DeviceCategoryAPI.getAllDeviceCategories(),
-    allDevices: async (_, { categoryId }, { dataSources, req }) =>
-      isLoggedIn(req) && dataSources.DeviceAPI.getAllDevices({ categoryId }),
+    allDevicesByCategory: async (_, { categoryId }, { dataSources, req }) =>
+      isLoggedIn(req) &&
+      dataSources.DeviceAPI.getAllDevicesByCategory({ categoryId }),
+    allDevices: async (_, __, { dataSources, req }) =>
+      isLoggedIn(req) && dataSources.DeviceAPI.getAllDevices(),
     allAssets: async (_, __, { dataSources, req }) =>
       isLoggedIn(req) && dataSources.AssetAPI.getAllAssets(),
   },
@@ -23,10 +26,9 @@ export default {
       await dataSources.UserAPI.registerUser({ email, password }),
 
     // Device Category
-    createDeviceCategory: async (_, { name }, { dataSources, req }) => {
+    createDeviceCategory: async (_, { name }, { dataSources, req }) =>
       isLoggedIn(req) &&
-        (await dataSources.DeviceCategoryAPI.createDeviceCategory({ name }));
-    },
+      (await dataSources.DeviceCategoryAPI.createDeviceCategory({ name })),
     deleteDeviceCategory: async (_, { id }, { dataSources, req }) =>
       isLoggedIn(req) &&
       (await dataSources.DeviceCategoryAPI.deleteDeviceCategory({ id })),
@@ -36,6 +38,8 @@ export default {
       isLoggedIn(req) && (await dataSources.DeviceAPI.addDevice(params)),
     deleteDevice: async (_, { id }, { dataSources, req }) =>
       isLoggedIn(req) && (await dataSources.DeviceAPI.deleteDevice({ id })),
+    editDevice: async (_, params, { dataSources, req }) =>
+      isLoggedIn(req) && (await dataSources.DeviceAPI.editDevice(params)),
 
     // Asset
     // params here are name and quantity

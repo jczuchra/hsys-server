@@ -1,11 +1,14 @@
 import { DataSource } from 'apollo-datasource';
 import { createElement, getAllElements, deleteElement } from './util';
-import { generateCreateMessages, generateDeleteMessages } from '../utils/messages';
+import {
+  generateCreateMessages,
+  generateDeleteMessages,
+} from '../utils/messages';
 
 const deviceCategoryMessages = {
   create: generateCreateMessages('device category'),
   delete: generateDeleteMessages('device category'),
-}
+};
 
 class DeviceCategoryAPI extends DataSource {
   constructor({ models }) {
@@ -29,31 +32,30 @@ class DeviceCategoryAPI extends DataSource {
    * instead
    */
   async createDeviceCategory({ name } = {}) {
-      return await createElement({
-        model: this.store.DeviceCategory,
-        where: {
-            name: name.toUpperCase()
-        },
-        messages: deviceCategoryMessages.create,
-      })
+    return await createElement({
+      model: this.store.DeviceCategory,
+      where: {
+        name: name.toUpperCase(),
+      },
+      messages: deviceCategoryMessages.create,
+    });
   }
 
   async getAllDeviceCategories() {
-      return await getAllElements({
-        model: this.store.DeviceCategory,
-        messages: deviceCategoryMessages,
-      })
+    return await getAllElements({
+      model: this.store.DeviceCategory,
+      messages: deviceCategoryMessages,
+    });
   }
 
   async deleteDeviceCategory({ id }) {
     return await deleteElement({
-        model: this.store.DeviceCategory,
-        where: { id },
-        cascade: true,
-        messages: deviceCategoryMessages.delete,
-    })
+      model: this.store.DeviceCategory,
+      where: { id },
+      cascade: true,
+      messages: deviceCategoryMessages.delete,
+    });
   }
-
 }
 
 export default DeviceCategoryAPI;

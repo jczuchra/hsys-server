@@ -1,11 +1,21 @@
 import { DataSource } from 'apollo-datasource';
-import { createElement, getAllElements, deleteElement } from './util';
-import { generateCreateMessages, generateDeleteMessages } from '../utils/messages';
+import {
+  createElement,
+  getAllElements,
+  deleteElement,
+  editElement,
+} from './util';
+import {
+  generateCreateMessages,
+  generateDeleteMessages,
+  generateEditMessages,
+} from '../utils/messages';
 
 const deviceMessages = {
   create: generateCreateMessages('device'),
   delete: generateDeleteMessages('device'),
-}
+  edit: generateEditMessages('device'),
+};
 
 class DeviceAPI extends DataSource {
   constructor({ models }) {
@@ -29,26 +39,43 @@ class DeviceAPI extends DataSource {
    * instead
    */
   async addDevice(params = {}) {
-      return await createElement({
-        model: this.store.Device,
-        where: {
-            name: params.name,
-        },
-        defaults: {
-            ...params,
-        },
-        messages: deviceMessages.create,
-      })
+    const addQuantity = async () => {
+      const queryResult = await this.store.DeviceCategory.findOne({
+        id: params.categoryId,
+      });
+      const { dataValues, _options: options } = queryResult;
+      queryResult.quantity = queryResult.quantity + 1;
+      queryResult.save();
+    };
+
+    return await createElement({
+      model: this.store.Device,
+      where: {
+        name: params.name,
+      },
+      defaults: {
+        ...params,
+      },
+      messages: deviceMessages.create,
+      callback: addQuantity,
+    });
   }
 
-  async getAllDevices({ categoryId }) {
-      return await getAllElements({
-        model: this.store.Device,
-        where: {
-            categoryId,
-        },
-        messages: deviceMessages,
-      })
+  async getAllDevicesByCategory({ categoryId }) {
+    return await getAllElements({
+      model: this.store.Device,
+      where: {
+        categoryId,
+      },
+      messages: deviceMessages,
+    });
+  }
+
+  async getAllDevices() {
+    return await getAllElements({
+      model: this.store.Device,
+      messages: deviceMessages,
+    });
   }
 
   async deleteDevice({ id }) {
@@ -56,7 +83,16 @@ class DeviceAPI extends DataSource {
       model: this.store.Device,
       where: { id },
       messages: deviceMessages.delete,
-  })
+    });
+  }
+
+  async editDevice(params) {
+    return await editElement({
+      model: this.store.Device,
+      where: { id: params.id },
+      messages: deviceMessages.edit,
+      newValues: { ...params },
+    });
   }
 }
 

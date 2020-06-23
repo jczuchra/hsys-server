@@ -1,4 +1,10 @@
-export const createElement = async ({ model, where, defaults, messages }) => {
+export const createElement = async ({
+  model,
+  where,
+  defaults,
+  messages,
+  callback,
+}) => {
   try {
     const queryResult = await model.findOrCreate({
       where,
@@ -7,6 +13,7 @@ export const createElement = async ({ model, where, defaults, messages }) => {
 
     const { dataValues, _options: options } = queryResult && queryResult[0];
     if (options.isNewRecord) {
+      if (callback) callback();
       return {
         message: messages.success,
         success: true,
@@ -31,7 +38,6 @@ export const getAllElements = async ({ model, where, messages }) => {
     const queryResult = await model.findAll({ where });
     const allElements = queryResult.map((element) => element.dataValues);
     const count = await model.count();
-    console.log('Count', count);
     return {
       count,
       allElements,

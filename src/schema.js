@@ -1,25 +1,36 @@
 import { gql } from 'apollo-server';
+import { GraphQLScalarType } from 'graphql';
+import { Kind } from 'graphql/language';
+
+const Date = new GraphQLScalarType({
+  name: 'Date',
+  description: 'Date custom scalar type',
+  parseValue(value) {
+    return new Date(value); // value from the client
+  },
+  serialize(value) {
+    return value.getTime(); // value sent to the client
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.INT) {
+      return new Date(ast.value); // ast value is always in string format
+    }
+    return null;
+  },
+});
 
 const typeDefs = gql`
+  scalar Date
+
   type User {
     id: ID
     createdAt: String
     updatedAt: String
     email: String
+    message: String
   }
 
   type Query {
-    # launches( # replace the current launches query with this one.
-    #     """
-    #     The number of results to show. Must be >= 1. Default = 20
-    #     """
-    #     pageSize: Int
-    #     """
-    #     If you add a cursor here, it will only return results _after_ this cursor
-    #     """
-    #     after: String
-    # ): LaunchConnection!
-    # launch(id: ID!): Launch
     # User
     me: User
 
@@ -28,51 +39,52 @@ const typeDefs = gql`
 
     # Device
     device(id: ID!): Device
-    allDevices(categoryId: ID!): AllDevices
+    allDevicesByCategory(categoryId: ID!): AllDevices
+    allDevices: AllDevices
 
     # Asset
     allAssets: AllAssets
   }
 
-  """
-  Simple wrapper around our list of launches that contains a cursor to the
-  last item in the list. Pass this cursor to the launches query to fetch results
-  after these.
-  """
   type Mutation {
     # User
     login(email: String, password: String): UserMessage
     register(email: String, password: String): UserMessage
     # DeviceCategory
-    createDeviceCategory(name: String): Status
-    deleteDeviceCategory(id: ID): Status
+    createDeviceCategory(name: String): StatusDeviceCategory
+    deleteDeviceCategory(id: ID): StatusDeviceCategory
 
     # Device
     addDevice(
       name: String
-      location: String
+      location: Int
       productionDate: String
       lastMaintenance: String
       categoryId: String
-    ): Status
+    ): StatusDevice
 
     editDevice(
       id: ID
       name: String
-      location: String
+      location: Int
       productionDate: String
       lastMaintenance: String
       categoryId: String
-    ): Status
+    ): StatusDevice
 
-    deleteDevice(id: ID!): Status
+    deleteDevice(id: ID!): StatusDevice
 
     # Asset
-    addAsset(name: String, quantity: Int, description: String): Status
+    addAsset(name: String, quantity: Int, description: String): StatusAsset
 
-    editAsset(id: ID!, name: String, quantity: Int, description: String): Status
+    editAsset(
+      id: ID!
+      name: String
+      quantity: Int
+      description: String
+    ): StatusAsset
 
-    deleteAsset(id: ID!): Status
+    deleteAsset(id: ID!): StatusAsset
   }
 
   type UserMessage {
@@ -83,17 +95,20 @@ const typeDefs = gql`
   type AllDeviceCategories {
     allElements: [DeviceCategory]
     info: Status
+    count: Int
   }
 
   type AllDevices {
     allElements: [Device]
     info: Status
+    count: Int
   }
 
   type DeviceCategory {
     id: ID
     name: String!
     quantity: Int
+    description: String
   }
 
   type AllAssets {
@@ -113,8 +128,8 @@ const typeDefs = gql`
     id: ID
     name: String!
     location: String
-    productionDate: String!
-    lastMaintenance: String!
+    productionDate: Date
+    lastMaintenance: Date
     categoryId: Int
   }
 
@@ -122,7 +137,27 @@ const typeDefs = gql`
     message: String
     success: Boolean
     error: Int
+  }
+
+  type StatusAsset {
+    message: String
+    success: Boolean
+    error: Int
     asset: Asset
+  }
+
+  type StatusDevice {
+    message: String
+    success: Boolean
+    error: Int
+    asset: Device
+  }
+
+  type StatusDeviceCategory {
+    message: String
+    success: Boolean
+    error: Int
+    asset: DeviceCategory
   }
 `;
 
