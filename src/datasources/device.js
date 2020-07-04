@@ -4,6 +4,7 @@ import {
   getAllElements,
   deleteElement,
   editElement,
+  getElement,
 } from './util';
 import {
   generateCreateMessages,
@@ -75,6 +76,13 @@ class DeviceAPI extends DataSource {
     return await getAllElements({
       model: this.store.Device,
       messages: deviceMessages,
+    });
+  }
+
+  async getDevice({ id }) {
+    return await getElement({
+      model: this.store.Device,
+      where: { id },
     });
   }
 

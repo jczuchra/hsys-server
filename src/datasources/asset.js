@@ -4,6 +4,7 @@ import {
   getAllElements,
   deleteElement,
   editElement,
+  getElement,
 } from './util';
 import {
   generateCreateMessages,
@@ -55,6 +56,13 @@ class AssetAPI extends DataSource {
     return await getAllElements({
       model: this.store.Asset,
       messages: assetMessages,
+    });
+  }
+
+  async getAsset({ id }) {
+    return await getElement({
+      model: this.store.Asset,
+      where: { id },
     });
   }
 

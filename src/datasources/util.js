@@ -104,3 +104,12 @@ export const editElement = async ({ model, where, messages, newValues }) => {
     };
   }
 };
+
+export const getElement = async ({ model, where }) => {
+  try {
+    const element = await model.findOne({ where });
+    return element;
+  } catch (error) {
+    return {};
+  }
+};

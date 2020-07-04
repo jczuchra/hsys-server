@@ -38,11 +38,12 @@ const typeDefs = gql`
     allDeviceCategories: AllDeviceCategories
 
     # Device
-    device(id: ID!): Device
+    getDevice(id: ID!): Device
     allDevicesByCategory(categoryId: ID!): AllDevices
     allDevices: AllDevices
 
     # Asset
+    getAsset(id: ID!): Asset
     allAssets: AllAssets
   }
 
@@ -50,6 +51,12 @@ const typeDefs = gql`
     # User
     login(email: String, password: String): UserMessage
     register(email: String, password: String): UserMessage
+    contactEmail(
+      name: String
+      email: String
+      phone: Int
+      message: String
+    ): ContactMessage
     # DeviceCategory
     createDeviceCategory(name: String): StatusDeviceCategory
     deleteDeviceCategory(id: ID): StatusDeviceCategory
@@ -158,6 +165,10 @@ const typeDefs = gql`
     success: Boolean
     error: Int
     asset: DeviceCategory
+  }
+
+  type ContactMessage {
+    message: String
   }
 `;
 

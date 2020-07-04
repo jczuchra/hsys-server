@@ -1,4 +1,4 @@
-import { paginateResults } from './utils/db';
+import { contactEmail } from './utils/email';
 import messages from './utils/messages';
 
 const authMessages = messages['server.resolvers.auth'];
@@ -13,10 +13,14 @@ export default {
     allDevicesByCategory: async (_, { categoryId }, { dataSources, req }) =>
       isLoggedIn(req) &&
       dataSources.DeviceAPI.getAllDevicesByCategory({ categoryId }),
+    getDevice: async (_, { id }, { dataSources, req }) =>
+      isLoggedIn(req) && dataSources.DeviceAPI.getDevice({ id }),
     allDevices: async (_, __, { dataSources, req }) =>
       isLoggedIn(req) && dataSources.DeviceAPI.getAllDevices(),
     allAssets: async (_, __, { dataSources, req }) =>
       isLoggedIn(req) && dataSources.AssetAPI.getAllAssets(),
+    getAsset: async (_, { id }, { dataSources, req }) =>
+      isLoggedIn(req) && dataSources.AssetAPI.getAsset({ id }),
   },
   Mutation: {
     // User
@@ -24,6 +28,8 @@ export default {
       await dataSources.UserAPI.loginUser({ email, password }),
     register: async (_, { email, password }, { dataSources, req }) =>
       await dataSources.UserAPI.registerUser({ email, password }),
+    contactEmail: (_, { name, email, phone, message }) =>
+      contactEmail(name, email, phone, message),
 
     // Device Category
     createDeviceCategory: async (_, { name }, { dataSources, req }) =>
