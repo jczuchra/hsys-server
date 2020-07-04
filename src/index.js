@@ -37,7 +37,7 @@ const server = new ApolloServer({
 const app = express();
 
 var corsOptions = {
-  origin: 'https://hsys-client.herokuapp.com/',
+  origin: 'https://hsys-client.herokuapp.com',
   credentials: true,
 };
 

@@ -15,16 +15,23 @@ const operatorsAliases = {
 //     }
 // });
 
-const sequelize = new SQL(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  underscored: true,
-  operatorsAliases,
-  protocol: 'postgres',
-  dialectOptions: {
-    ssl: true,
-    rejectUnauthorized: false,
-  },
-});
+const sequelize = process.env.DATABASE_URL
+  ? new SQL(process.env.DATABASE_URL, {
+      dialect: 'postgres',
+      underscored: true,
+      operatorsAliases,
+      protocol: 'postgres',
+      dialectOptions: {
+        ssl: true,
+        rejectUnauthorized: false,
+      },
+    })
+  : new SQL('hsys', 'postgres', 'Zaq123edc', {
+      dialect: 'postgres',
+      underscored: true,
+      operatorsAliases,
+      protocol: 'postgres',
+    });
 
 const models = {
   Asset: sequelize.import('./asset'),
