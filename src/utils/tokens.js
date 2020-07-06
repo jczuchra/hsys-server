@@ -60,9 +60,11 @@ export const validateTokens = async (req, res, models) => {
   const tokens = createTokens(user);
   res.cookie('refresh-token', tokens.refreshToken, {
     expires: new Date(60 * 60 * 60 + Date.now()),
+    domain: 'herokuapp.com',
   });
   res.cookie('access-token', tokens.accessToken, {
     expires: new Date(60 * 60 * 60 + Date.now()),
+    domain: 'herokuapp.com',
   });
   req.userId = user.id;
 };
