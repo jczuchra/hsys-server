@@ -2,7 +2,7 @@ import jwt, { verify } from 'jsonwebtoken';
 
 const createAccessToken = (user) =>
   jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: 15,
+    expiresIn: 600,
   });
 
 const createRefreshToken = (user) =>
@@ -58,7 +58,11 @@ export const validateTokens = async (req, res, models) => {
   user.count = user.count + 1;
   user.save();
   const tokens = createTokens(user);
-  res.cookie('refresh-token', tokens.refreshToken);
-  res.cookie('access-token', tokens.accessToken);
+  res.cookie('refresh-token', tokens.refreshToken, {
+    expires: new Date(60 * 60 * 60 + Date.now()),
+  });
+  res.cookie('access-token', tokens.accessToken, {
+    expires: new Date(60 * 60 * 60 + Date.now()),
+  });
   req.userId = user.id;
 };

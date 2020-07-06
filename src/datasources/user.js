@@ -69,8 +69,12 @@ class UserAPI extends DataSource {
       }
 
       const { accessToken, refreshToken } = createTokens(user);
-      this.context.res.cookie('refresh-token', refreshToken);
-      this.context.res.cookie('access-token', accessToken);
+      this.context.res.cookie('refresh-token', refreshToken, {
+        expires: new Date(60 * 60 * 60 + Date.now()),
+      });
+      this.context.res.cookie('access-token', accessToken, {
+        expires: new Date(60 * 60 * 60 + Date.now()),
+      });
       return {
         status: true,
         message: userMessages.login.success,
