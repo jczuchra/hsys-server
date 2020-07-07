@@ -62,13 +62,11 @@ export const validateTokens = async (req, res, models) => {
     expires: new Date(60 * 60 * 60 + Date.now()),
     httpOnly: true,
     secure: true,
-    sameSite: 'Lax',
   });
   res.cookie('access-token', tokens.accessToken, {
     expires: new Date(60 * 60 * 60 + Date.now()),
     httpOnly: true,
     secure: true,
-    sameSite: 'Lax',
   });
   req.userId = user.id;
 };

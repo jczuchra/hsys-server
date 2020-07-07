@@ -73,13 +73,11 @@ class UserAPI extends DataSource {
         expires: new Date(60 * 60 * 60 + Date.now()),
         httpOnly: true,
         secure: true,
-        sameSite: 'Lax',
       });
       this.context.res.cookie('access-token', accessToken, {
         expires: new Date(60 * 60 * 60 + Date.now()),
         httpOnly: true,
         secure: true,
-        sameSite: 'Lax',
       });
       return {
         status: true,
