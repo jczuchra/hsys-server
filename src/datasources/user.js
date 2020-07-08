@@ -70,12 +70,12 @@ class UserAPI extends DataSource {
 
       const { accessToken, refreshToken } = createTokens(user);
       this.context.res.cookie('refresh-token', refreshToken, {
-        expires: new Date(60 * 60 * 60 + Date.now()),
+        maxAge: 60 * 60 * 60,
         httpOnly: true,
         secure: true,
       });
       this.context.res.cookie('access-token', accessToken, {
-        expires: new Date(60 * 60 * 60 + Date.now()),
+        maxAge: 60 * 60 * 60,
         httpOnly: true,
         secure: true,
       });

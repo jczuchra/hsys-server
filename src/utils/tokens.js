@@ -59,12 +59,12 @@ export const validateTokens = async (req, res, models) => {
   user.save();
   const tokens = createTokens(user);
   res.cookie('refresh-token', tokens.refreshToken, {
-    expires: new Date(60 * 60 * 60 + Date.now()),
+    maxAge: 60 * 60 * 60,
     httpOnly: true,
     secure: true,
   });
   res.cookie('access-token', tokens.accessToken, {
-    expires: new Date(60 * 60 * 60 + Date.now()),
+    maxAge: 60 * 60 * 60,
     httpOnly: true,
     secure: true,
   });
