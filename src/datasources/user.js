@@ -70,11 +70,13 @@ class UserAPI extends DataSource {
 
       const { accessToken, refreshToken } = createTokens(user);
       this.context.res.cookie('refresh-token', refreshToken, {
+        domain: '.herokuapp.com',
         maxAge: 60 * 60 * 60 * 24 * 7,
         httpOnly: true,
         secure: true,
       });
       this.context.res.cookie('access-token', accessToken, {
+        domain: '.herokuapp.com',
         maxAge: 60 * 60 * 60 * 24 * 7,
         httpOnly: true,
         secure: true,

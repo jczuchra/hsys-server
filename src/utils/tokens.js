@@ -59,11 +59,13 @@ export const validateTokens = async (req, res, models) => {
   user.save();
   const tokens = createTokens(user);
   res.cookie('refresh-token', tokens.refreshToken, {
+    domain: '.herokuapp.com',
     maxAge: 60 * 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
   });
   res.cookie('access-token', tokens.accessToken, {
+    domain: '.herokuapp.com',
     maxAge: 60 * 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
