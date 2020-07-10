@@ -72,6 +72,12 @@ app.use((req, _, next) => {
   next();
 });
 
+app.use(express.static('public'));
+
+app.get('/', function (req, res) {
+  res.render('index.html');
+});
+
 server.applyMiddleware({ app, cors: false });
 
 models.sequelize.sync().then(() => {
