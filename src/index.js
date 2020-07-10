@@ -37,11 +37,12 @@ const server = new ApolloServer({
 const app = express();
 
 const whitelist = [
+  'https://hsys-server.herokuapp.com',
   'https://hsys-client.herokuapp.com',
   'http://localhost:3000',
 ];
 
-var corsOptions = {
+const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
@@ -74,7 +75,7 @@ app.use((req, _, next) => {
 
 app.use(express.static('public'));
 
-app.get('/', function (req, res) {
+app.get('/', cors(corsOptions), function (req, res) {
   res.render('index.html');
 });
 
