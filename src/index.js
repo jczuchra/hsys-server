@@ -37,6 +37,7 @@ const server = new ApolloServer({
 const app = express();
 
 const whitelist = [
+  'undefined',
   'https://hsys-server.herokuapp.com',
   'https://hsys-client.herokuapp.com',
   'http://localhost:3000',
