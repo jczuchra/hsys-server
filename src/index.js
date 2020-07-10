@@ -37,7 +37,6 @@ const server = new ApolloServer({
 const app = express();
 
 const whitelist = [
-  'undefined',
   'https://hsys-server.herokuapp.com',
   'https://hsys-client.herokuapp.com',
   'http://localhost:3000',
@@ -46,7 +45,8 @@ const whitelist = [
 const corsOptions = {
   origin: function (origin, callback) {
     console.log('Origin', origin);
-    if (whitelist.indexOf(origin) !== -1) {
+
+    if (!origin || whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
