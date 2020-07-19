@@ -56,6 +56,7 @@ const typeDefs = gql`
       email: String
       phone: Int
       message: String
+      token: String
     ): ContactMessage
     # DeviceCategory
     createDeviceCategory(name: String): StatusDeviceCategory
@@ -169,6 +170,8 @@ const typeDefs = gql`
 
   type ContactMessage {
     message: String
+    errors: [String]
+    success: Boolean
   }
 `;
 

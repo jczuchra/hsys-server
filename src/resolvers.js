@@ -28,8 +28,8 @@ export default {
       await dataSources.UserAPI.loginUser({ email, password }),
     register: async (_, { email, password }, { dataSources, req }) =>
       await dataSources.UserAPI.registerUser({ email, password }),
-    contactEmail: (_, { name, email, phone, message }) =>
-      contactEmail(name, email, phone, message),
+    contactEmail: async (_, { name, email, phone, message, token }) =>
+      await contactEmail(name, email, phone, message, token),
 
     // Device Category
     createDeviceCategory: async (_, { name }, { dataSources, req }) =>
